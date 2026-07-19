@@ -190,9 +190,13 @@
       poster.alt = "";
 
       const video = document.createElement("video");
-      video.playsInline = true; video.muted = muted; video.loop = true;
-      video.preload = "none";           // mounted lazily by the observer
+      // Set ATTRIBUTES (not just properties) — mobile browsers check these for autoplay eligibility.
+      video.setAttribute("playsinline", "");
       video.setAttribute("webkit-playsinline", "");
+      video.setAttribute("muted", "");
+      video.setAttribute("loop", "");
+      video.setAttribute("preload", "none");
+      video.muted = true; video.loop = true; video.playsInline = true;
       video.poster = v.poster || "";
       video.dataset.src = v.src;        // real src attached on demand
 
@@ -342,8 +346,9 @@
       // mount current ±1, unmount the rest
       [...feed.children].forEach((slide, i) => {
         const video = slide.querySelector("video");
-        if (Math.abs(i - idx) <= 1) mountVideo(video);
-        else unmountVideo(video);
+        const dist = Math.abs(i - idx);
+        if (dist <= 1) mountVideo(video);
+        else if (dist > 2) releaseVideo(video);
         if (i === idx) {
           playVideo(video);
           const v = videos[idx];
@@ -361,30 +366,29 @@
       });
     }
 
-    // Robust play: always attempt muted first (mobile browsers guarantee muted autoplay),
-    // then unmute if the user has chosen sound-on and the browser allows it.
+    // Simple, mobile-proven play: keep it muted (autoplay always allowed), just call play().
+    // Unmuting is a separate optional step the user triggers, never gated on the play promise.
     function playVideo(video) {
       mountVideo(video);
-      const wantSound = !muted;
-      video.muted = true;                       // muted play is never blocked
+      video.muted = muted;              // reflect current global mute choice
       const p = video.play();
-      if (p && p.then) {
-        p.then(() => { if (wantSound) { video.muted = false; video.play().catch(() => { video.muted = true; }); } })
-         .catch(() => {
-           // even muted play failed (rare) — retry once after a tick
-           setTimeout(() => { video.muted = true; video.play().catch(() => {}); }, 50);
-         });
-      } else {
-        video.muted = wantSound ? false : true;
-      }
+      if (p && p.catch) p.catch(() => { video.muted = true; video.play().catch(() => {}); });
     }
 
     function mountVideo(video) {
-      if (!video.src && video.dataset.src) { video.src = video.dataset.src; video.preload = "auto"; }
+      if (!video.getAttribute("src") && video.dataset.src) {
+        video.setAttribute("src", video.dataset.src);
+        video.load();
+      }
     }
+    // Only tear down videos that are FAR from view (>2 away) — keeping the active
+    // and adjacent srcs attached avoids the stall-on-remount bug seen on mobile.
     function unmountVideo(video) {
       video.pause();
-      if (video.src) { video.removeAttribute("src"); video.load(); }
+    }
+    function releaseVideo(video) {
+      video.pause();
+      if (video.getAttribute("src")) { video.removeAttribute("src"); video.load(); }
     }
 
     function toggleMute() {
@@ -400,14 +404,8 @@
       if (started) return;
       started = true;
       tapHint.hidden = true;
-      muted = false; // try sound-on; playVideo falls back to muted if the browser blocks it
-      [...feed.querySelectorAll(".muteIcon")].forEach(b => b.textContent = "🔊");
-      // Prime EVERY video with a muted play()+pause() inside this gesture so later
-      // programmatic plays (on swipe) are also allowed by mobile autoplay policy.
-      [...feed.querySelectorAll("video")].forEach((vd, i) => {
-        if (i > 1) return; // only prime first two to save bandwidth
-        mountVideo(vd);
-      });
+      muted = true; // START MUTED — guaranteed to autoplay on every mobile browser. User taps 🔊 for sound.
+      [...feed.querySelectorAll(".muteIcon")].forEach(b => b.textContent = "🔇");
       setActive(0, true); // force — bypass the observer guard
     }
     document.getElementById("startBtn").onclick = startFeed;
