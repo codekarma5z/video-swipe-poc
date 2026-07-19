@@ -1,37 +1,11 @@
 [
-  {
-    "id": "sample-1",
-    "src": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    "poster": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
-    "title": "Sample 1 — Big Buck Bunny",
-    "caption": "Swipe up for next · swipe left/right to react"
-  },
-  {
-    "id": "sample-2",
-    "src": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-    "poster": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg",
-    "title": "Sample 2 — Elephants Dream",
-    "caption": "Replace these with your marketing reels"
-  },
-  {
-    "id": "sample-3",
-    "src": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-    "poster": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg",
-    "title": "Sample 3 — For Bigger Blazes",
-    "caption": "Edit videos.json to point at real files"
-  },
-  {
-    "id": "sample-4",
-    "src": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-    "poster": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoyrides.jpg",
-    "title": "Sample 4 — For Bigger Joyrides",
-    "caption": "Likes/dislikes are tracked per video"
-  },
-  {
-    "id": "sample-5",
-    "src": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-    "poster": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerMeltdowns.jpg",
-    "title": "Sample 5 — For Bigger Meltdowns",
-    "caption": "That's the whole POC"
-  }
+  { "id": "sb1", "src": "videos/sb1.mp4", "poster": "posters/sb1.jpg", "title": "SB1 · A2 · Number Shock", "caption": "Swipe up for next · left/right to react" },
+  { "id": "sb2", "src": "videos/sb2.mp4", "poster": "posters/sb2.jpg", "title": "SB2 · A2 · Number Shock", "caption": "" },
+  { "id": "sb3", "src": "videos/sb3.mp4", "poster": "posters/sb3.jpg", "title": "SB3 · A2 · Other", "caption": "" },
+  { "id": "sb4", "src": "videos/sb4.mp4", "poster": "posters/sb4.jpg", "title": "SB4 · A1 · Story", "caption": "" },
+  { "id": "sb5", "src": "videos/sb5.mp4", "poster": "posters/sb5.jpg", "title": "SB5 · A1 · Proof", "caption": "" },
+  { "id": "sb6", "src": "videos/sb6.mp4", "poster": "posters/sb6.jpg", "title": "SB6 · A1 · Question", "caption": "" },
+  { "id": "sb7", "src": "videos/sb7.mp4", "poster": "posters/sb7.jpg", "title": "SB7 · A1 · Number Shock", "caption": "" },
+  { "id": "sb8", "src": "videos/sb8.mp4", "poster": "posters/sb8.jpg", "title": "SB8 · A1 · Number Shock", "caption": "" },
+  { "id": "sb9", "src": "videos/sb9.mp4", "poster": "posters/sb9.jpg", "title": "SB9 · A1 · Number Shock", "caption": "" }
 ]
