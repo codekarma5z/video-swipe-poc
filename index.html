@@ -71,6 +71,10 @@
     .stamp.like { left: 20px; color: var(--like); border-color: var(--like); transform: rotate(-18deg); }
     .stamp.nope { right: 20px; color: var(--nope); border-color: var(--nope); transform: rotate(18deg); }
 
+    /* Temporarily hidden per request — mute toggle, like (♥) and nope (✕) buttons.
+       Remove this block to bring them back. Swipe left/right still tracks reactions. */
+    .actions, .muteIcon { display: none !important; }
+
     /* Overlays */
     .meta {
       position: absolute; left: 16px; right: 84px; bottom: calc(28px + env(safe-area-inset-bottom));
