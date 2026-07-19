@@ -47,12 +47,16 @@
       }
     }
 
-    /* The draggable card wrapping the video (X-axis Tinder gesture lives here) */
+    /* The draggable card wrapping the video (X-axis Tinder gesture lives here).
+       IMPORTANT: no persistent will-change/transform here — on mobile Safari a <video>
+       inside a permanently GPU-promoted layer renders a frozen frame while it plays.
+       We only promote the layer WHILE dragging (via .dragging), then drop it. */
     .card {
       position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
-      will-change: transform; touch-action: pan-y;
+      touch-action: pan-y;
     }
+    .card.dragging { will-change: transform; }
     .card video {
       width: 100%; height: 100%; object-fit: cover; background: #000; display: block;
     }
@@ -263,6 +267,7 @@
         }
         if (decidedAxis === "x") {
           if (e && e.cancelable) e.preventDefault(); // we own this gesture; stop the vertical scroller
+          card.classList.add("dragging"); // promote to GPU layer only while actively dragging
           const rot = dx / 18;
           card.style.transform = `translateX(${dx}px) rotate(${rot}deg)`;
           likeStamp.style.opacity = dx > 0 ? Math.min(dx / THRESHOLD, 1) : 0;
@@ -270,6 +275,12 @@
           return true; // horizontal drag owned
         }
         return false;
+      }
+      function settle() {
+        // Drop the transform and GPU layer so the video composites/repaints normally again.
+        card.style.transition = "none";
+        card.style.transform = "";
+        card.classList.remove("dragging");
       }
       function end() {
         if (!dragging) return;
@@ -280,9 +291,12 @@
           const off = dx > 0 ? window.innerWidth : -window.innerWidth;
           card.style.transform = `translateX(${off}px) rotate(${dx/12}deg)`;
           react(v, index, dir, "swipe");
-          setTimeout(() => { card.style.transition = "transform .3s ease-out"; card.style.transform = ""; }, 260);
-        } else {
+          setTimeout(settle, 300);
+        } else if (decidedAxis === "x") {
           card.style.transform = "";
+          setTimeout(settle, 300); // let it spring back, then drop the layer
+        } else {
+          settle(); // vertical/tap — never promoted, clear immediately
         }
         likeStamp.style.opacity = 0; nopeStamp.style.opacity = 0;
       }
