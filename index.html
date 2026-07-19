@@ -63,7 +63,9 @@
     .poster {
       position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; background: #111;
+      transition: opacity .25s ease; z-index: 1; pointer-events: none;
     }
+    .card video { position: relative; z-index: 0; } /* video sits under poster until poster fades */
 
     /* Like / Nope stamps that fade in as you drag */
     .stamp {
@@ -196,6 +198,8 @@
       poster.className = "poster";
       poster.src = v.poster || "";
       poster.alt = "";
+      // The poster is a placeholder shown until the video paints its first real frame.
+      // It MUST be removed from view once the video plays, or it covers the video forever.
 
       const video = document.createElement("video");
       // Set ATTRIBUTES (not just properties) — mobile browsers check these for autoplay eligibility.
@@ -236,7 +240,11 @@
       slide.append(card, bar, meta, mute, actions);
 
       attachSwipe(card, v, index, likeStamp, nopeStamp);
-      video.addEventListener("timeupdate", () => onProgress(v, video, bar));
+      // Hide the poster as soon as the video is actually rendering frames, and re-show
+      // it if the video is torn down (so a far-away slide isn't blank).
+      const hidePoster = () => { poster.style.opacity = "0"; };
+      video.addEventListener("playing", hidePoster);
+      video.addEventListener("timeupdate", () => { if (video.currentTime > 0) hidePoster(); onProgress(v, video, bar); });
 
       return slide;
     }
