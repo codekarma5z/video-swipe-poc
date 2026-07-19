@@ -321,6 +321,7 @@
 
     /* ---------- Autoplay / lazy mount via IntersectionObserver ---------- */
     let currentIndex = -1;
+    let started = false; // don't play until the user taps Start (mobile autoplay policy)
     function observe() {
       const io = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -333,8 +334,9 @@
       [...feed.children].forEach(s => io.observe(s));
     }
 
-    function setActive(idx) {
-      if (idx === currentIndex) return;
+    function setActive(idx, force) {
+      if (!started && !force) return;          // ignore observer until Start tapped
+      if (idx === currentIndex && !force) return;
       const prev = currentIndex;
       currentIndex = idx;
       // mount current ±1, unmount the rest
@@ -343,11 +345,10 @@
         if (Math.abs(i - idx) <= 1) mountVideo(video);
         else unmountVideo(video);
         if (i === idx) {
-          video.muted = muted;
-          const p = video.play(); if (p && p.catch) p.catch(() => {});
+          playVideo(video);
           const v = videos[idx];
           if (prev !== idx) track("video_started", { video_id: v.id, position_in_feed: idx });
-          if (prev !== -1 && videos[prev]) {
+          if (prev !== -1 && prev !== idx && videos[prev]) {
             const pv = videos[prev];
             const pvid = feed.children[prev].querySelector("video");
             if (!(progressFired[pv.id] && progressFired[pv.id].has(0.95))) {
@@ -358,6 +359,24 @@
           video.pause();
         }
       });
+    }
+
+    // Robust play: always attempt muted first (mobile browsers guarantee muted autoplay),
+    // then unmute if the user has chosen sound-on and the browser allows it.
+    function playVideo(video) {
+      mountVideo(video);
+      const wantSound = !muted;
+      video.muted = true;                       // muted play is never blocked
+      const p = video.play();
+      if (p && p.then) {
+        p.then(() => { if (wantSound) { video.muted = false; video.play().catch(() => { video.muted = true; }); } })
+         .catch(() => {
+           // even muted play failed (rare) — retry once after a tick
+           setTimeout(() => { video.muted = true; video.play().catch(() => {}); }, 50);
+         });
+      } else {
+        video.muted = wantSound ? false : true;
+      }
     }
 
     function mountVideo(video) {
@@ -376,15 +395,23 @@
 
     function escapeHtml(s) { return (s || "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
 
-    /* ---------- Start (unlocks autoplay with sound-on for the first video) ---------- */
-    document.getElementById("startBtn").onclick = () => {
+    /* ---------- Start: user gesture unlocks playback ---------- */
+    function startFeed() {
+      if (started) return;
+      started = true;
       tapHint.hidden = true;
-      muted = false;
+      muted = false; // try sound-on; playVideo falls back to muted if the browser blocks it
       [...feed.querySelectorAll(".muteIcon")].forEach(b => b.textContent = "🔊");
-      setActive(0);
-      const first = feed.children[0]?.querySelector("video");
-      if (first) { first.muted = false; first.play().catch(() => { first.muted = true; muted = true; first.play().catch(()=>{}); }); }
-    };
+      // Prime EVERY video with a muted play()+pause() inside this gesture so later
+      // programmatic plays (on swipe) are also allowed by mobile autoplay policy.
+      [...feed.querySelectorAll("video")].forEach((vd, i) => {
+        if (i > 1) return; // only prime first two to save bandwidth
+        mountVideo(vd);
+      });
+      setActive(0, true); // force — bypass the observer guard
+    }
+    document.getElementById("startBtn").onclick = startFeed;
+    tapHint.addEventListener("click", startFeed); // tapping anywhere on the hint starts too
   </script>
 </body>
 </html>
