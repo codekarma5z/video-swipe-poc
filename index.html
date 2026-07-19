@@ -23,15 +23,28 @@
       overscroll-behavior-y: contain;
       scrollbar-width: none;
       touch-action: pan-y; /* let the horizontal gesture layer own X */
+      margin: 0 auto;
     }
     #feed::-webkit-scrollbar { display: none; }
 
     .slide {
       position: relative;
-      height: 100dvh; width: 100vw;
+      height: 100dvh; width: 100%;
       scroll-snap-align: start; scroll-snap-stop: always;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden; background: #000;
+    }
+
+    /* On wide screens (desktop), show a centered phone-width column, not a stranded 9:16 strip */
+    @media (min-width: 640px) {
+      body { background: #0a0a0a; }
+      #feed {
+        width: min(430px, calc(100dvh * 9 / 16));
+        height: 100dvh;
+        border-radius: 18px;
+        box-shadow: 0 20px 60px rgba(0,0,0,.6);
+        overflow: hidden auto;
+      }
     }
 
     /* The draggable card wrapping the video (X-axis Tinder gesture lives here) */
@@ -225,35 +238,32 @@
       return wrap;
     }
 
-    /* ---------- Horizontal Tinder-style gesture ---------- */
+    /* ---------- Horizontal Tinder-style gesture (touch + mouse) ---------- */
     function attachSwipe(card, v, index, likeStamp, nopeStamp) {
       let startX = 0, startY = 0, dx = 0, dy = 0, dragging = false, decidedAxis = null;
       const THRESHOLD = 90;
 
-      card.addEventListener("touchstart", (e) => {
-        const t = e.touches[0];
-        startX = t.clientX; startY = t.clientY; dx = dy = 0;
-        dragging = true; decidedAxis = null;
+      function begin(x, y) {
+        startX = x; startY = y; dx = dy = 0; dragging = true; decidedAxis = null;
         card.style.transition = "none";
-      }, { passive: true });
-
-      card.addEventListener("touchmove", (e) => {
+      }
+      function move(x, y, e) {
         if (!dragging) return;
-        const t = e.touches[0];
-        dx = t.clientX - startX; dy = t.clientY - startY;
+        dx = x - startX; dy = y - startY;
         if (!decidedAxis && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
           decidedAxis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
         }
         if (decidedAxis === "x") {
-          e.preventDefault(); // we own this gesture; stop the vertical scroller
+          if (e && e.cancelable) e.preventDefault(); // we own this gesture; stop the vertical scroller
           const rot = dx / 18;
           card.style.transform = `translateX(${dx}px) rotate(${rot}deg)`;
           likeStamp.style.opacity = dx > 0 ? Math.min(dx / THRESHOLD, 1) : 0;
           nopeStamp.style.opacity = dx < 0 ? Math.min(-dx / THRESHOLD, 1) : 0;
+          return true; // horizontal drag owned
         }
-      }, { passive: false });
-
-      card.addEventListener("touchend", () => {
+        return false;
+      }
+      function end() {
         if (!dragging) return;
         dragging = false;
         card.style.transition = "transform .28s ease-out";
@@ -267,7 +277,17 @@
           card.style.transform = "";
         }
         likeStamp.style.opacity = 0; nopeStamp.style.opacity = 0;
-      });
+      }
+
+      // Touch
+      card.addEventListener("touchstart", (e) => begin(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+      card.addEventListener("touchmove", (e) => move(e.touches[0].clientX, e.touches[0].clientY, e), { passive: false });
+      card.addEventListener("touchend", end);
+
+      // Mouse (desktop testing)
+      card.addEventListener("mousedown", (e) => { begin(e.clientX, e.clientY); });
+      window.addEventListener("mousemove", (e) => { if (dragging) move(e.clientX, e.clientY, null); });
+      window.addEventListener("mouseup", () => { if (dragging) end(); });
     }
 
     /* ---------- Reactions ---------- */
