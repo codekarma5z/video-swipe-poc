@@ -1,11 +1,233 @@
 [
-  { "id": "sb1", "src": "videos/sb1.mp4", "poster": "posters/sb1.jpg", "title": "SB1 · A2 · Number Shock", "caption": "Swipe up for next · left/right to react" },
-  { "id": "sb2", "src": "videos/sb2.mp4", "poster": "posters/sb2.jpg", "title": "SB2 · A2 · Number Shock", "caption": "" },
-  { "id": "sb3", "src": "videos/sb3.mp4", "poster": "posters/sb3.jpg", "title": "SB3 · A2 · Other", "caption": "" },
-  { "id": "sb4", "src": "videos/sb4.mp4", "poster": "posters/sb4.jpg", "title": "SB4 · A1 · Story", "caption": "" },
-  { "id": "sb5", "src": "videos/sb5.mp4", "poster": "posters/sb5.jpg", "title": "SB5 · A1 · Proof", "caption": "" },
-  { "id": "sb6", "src": "videos/sb6.mp4", "poster": "posters/sb6.jpg", "title": "SB6 · A1 · Question", "caption": "" },
-  { "id": "sb7", "src": "videos/sb7.mp4", "poster": "posters/sb7.jpg", "title": "SB7 · A1 · Number Shock", "caption": "" },
-  { "id": "sb8", "src": "videos/sb8.mp4", "poster": "posters/sb8.jpg", "title": "SB8 · A1 · Number Shock", "caption": "" },
-  { "id": "sb9", "src": "videos/sb9.mp4", "poster": "posters/sb9.jpg", "title": "SB9 · A1 · Number Shock", "caption": "" }
+  {
+    "id": "sb1",
+    "src": "videos/sb1.mp4",
+    "poster": "posters/sb1.jpg",
+    "title": "SB1 · A2 · Number Shock",
+    "caption": "Swipe up for next"
+  },
+  {
+    "id": "sb2",
+    "src": "videos/sb2.mp4",
+    "poster": "posters/sb2.jpg",
+    "title": "SB2 · A2 · Number Shock",
+    "caption": ""
+  },
+  {
+    "id": "sb3",
+    "src": "videos/sb3.mp4",
+    "poster": "posters/sb3.jpg",
+    "title": "SB3 · A2 · Other",
+    "caption": ""
+  },
+  {
+    "id": "sb4",
+    "src": "videos/sb4.mp4",
+    "poster": "posters/sb4.jpg",
+    "title": "SB4 · A1 · Story",
+    "caption": ""
+  },
+  {
+    "id": "sb5",
+    "src": "videos/sb5.mp4",
+    "poster": "posters/sb5.jpg",
+    "title": "SB5 · A1 · Proof",
+    "caption": ""
+  },
+  {
+    "id": "sb6",
+    "src": "videos/sb6.mp4",
+    "poster": "posters/sb6.jpg",
+    "title": "SB6 · A1 · Question",
+    "caption": ""
+  },
+  {
+    "id": "sb7",
+    "src": "videos/sb7.mp4",
+    "poster": "posters/sb7.jpg",
+    "title": "SB7 · A1 · Number Shock",
+    "caption": ""
+  },
+  {
+    "id": "sb8",
+    "src": "videos/sb8.mp4",
+    "poster": "posters/sb8.jpg",
+    "title": "SB8 · A1 · Number Shock",
+    "caption": ""
+  },
+  {
+    "id": "sb9",
+    "src": "videos/sb9.mp4",
+    "poster": "posters/sb9.jpg",
+    "title": "SB9 · A1 · Number Shock",
+    "caption": ""
+  },
+  {
+    "id": "sb10",
+    "src": "videos/sb10.mp4",
+    "poster": "posters/sb10.jpg",
+    "title": "SB10 · A3 · Number Shock",
+    "caption": ""
+  },
+  {
+    "id": "sb11",
+    "src": "videos/sb11.mp4",
+    "poster": "posters/sb11.jpg",
+    "title": "SB11 · A3 · Question",
+    "caption": ""
+  },
+  {
+    "id": "sb12",
+    "src": "videos/sb12.mp4",
+    "poster": "posters/sb12.jpg",
+    "title": "SB12 · A3 · Proof",
+    "caption": ""
+  },
+  {
+    "id": "sb13",
+    "src": "videos/sb13.mp4",
+    "poster": "posters/sb13.jpg",
+    "title": "SB13 · A4 · Number Shock",
+    "caption": ""
+  },
+  {
+    "id": "sb14",
+    "src": "videos/sb14.mp4",
+    "poster": "posters/sb14.jpg",
+    "title": "SB14 · A4 · Question",
+    "caption": ""
+  },
+  {
+    "id": "sb15",
+    "src": "videos/sb15.mp4",
+    "poster": "posters/sb15.jpg",
+    "title": "SB15 · A4 · Story",
+    "caption": ""
+  },
+  {
+    "id": "sb16",
+    "src": "videos/sb16.mp4",
+    "poster": "posters/sb16.jpg",
+    "title": "SB16 · P1 · Story",
+    "caption": ""
+  },
+  {
+    "id": "sb17",
+    "src": "videos/sb17.mp4",
+    "poster": "posters/sb17.jpg",
+    "title": "SB17 · P1 · Question",
+    "caption": ""
+  },
+  {
+    "id": "sb18",
+    "src": "videos/sb18.mp4",
+    "poster": "posters/sb18.jpg",
+    "title": "SB18 · P1 · Story",
+    "caption": ""
+  },
+  {
+    "id": "sb19",
+    "src": "videos/sb19.mp4",
+    "poster": "posters/sb19.jpg",
+    "title": "SB19 · P2 · Question",
+    "caption": ""
+  },
+  {
+    "id": "sb20",
+    "src": "videos/sb20.mp4",
+    "poster": "posters/sb20.jpg",
+    "title": "SB20 · P2 · Proof",
+    "caption": ""
+  },
+  {
+    "id": "sb21",
+    "src": "videos/sb21.mp4",
+    "poster": "posters/sb21.jpg",
+    "title": "SB21 · P2 · Question",
+    "caption": ""
+  },
+  {
+    "id": "sb22",
+    "src": "videos/sb22.mp4",
+    "poster": "posters/sb22.jpg",
+    "title": "SB22 · P3 · Story",
+    "caption": ""
+  },
+  {
+    "id": "sb23",
+    "src": "videos/sb23.mp4",
+    "poster": "posters/sb23.jpg",
+    "title": "SB23 · P3 · Story",
+    "caption": ""
+  },
+  {
+    "id": "sb24",
+    "src": "videos/sb24.mp4",
+    "poster": "posters/sb24.jpg",
+    "title": "SB24 · P3 · Question",
+    "caption": ""
+  },
+  {
+    "id": "sb25",
+    "src": "videos/sb25.mp4",
+    "poster": "posters/sb25.jpg",
+    "title": "SB25 · P4 · Number Shock",
+    "caption": ""
+  },
+  {
+    "id": "sb26",
+    "src": "videos/sb26.mp4",
+    "poster": "posters/sb26.jpg",
+    "title": "SB26 · P4 · Proof",
+    "caption": ""
+  },
+  {
+    "id": "sb27",
+    "src": "videos/sb27.mp4",
+    "poster": "posters/sb27.jpg",
+    "title": "SB27 · P4 · Question",
+    "caption": ""
+  },
+  {
+    "id": "sb28",
+    "src": "videos/sb28.mp4",
+    "poster": "posters/sb28.jpg",
+    "title": "SB28 · P5 · Story",
+    "caption": ""
+  },
+  {
+    "id": "sb29",
+    "src": "videos/sb29.mp4",
+    "poster": "posters/sb29.jpg",
+    "title": "SB29 · P5 · Question",
+    "caption": ""
+  },
+  {
+    "id": "sb30",
+    "src": "videos/sb30.mp4",
+    "poster": "posters/sb30.jpg",
+    "title": "SB30 · P5 · Proof",
+    "caption": ""
+  },
+  {
+    "id": "sb31",
+    "src": "videos/sb31.mp4",
+    "poster": "posters/sb31.jpg",
+    "title": "SB31 · P6 · Story",
+    "caption": ""
+  },
+  {
+    "id": "sb32",
+    "src": "videos/sb32.mp4",
+    "poster": "posters/sb32.jpg",
+    "title": "SB32 · P6 · Story",
+    "caption": ""
+  },
+  {
+    "id": "sb33",
+    "src": "videos/sb33.mp4",
+    "poster": "posters/sb33.jpg",
+    "title": "SB33 · P6 · Number Shock",
+    "caption": ""
+  }
 ]
